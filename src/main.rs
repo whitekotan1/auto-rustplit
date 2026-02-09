@@ -38,13 +38,13 @@ fn main() -> Result<()> {
 
              frame.render_widget(
                 Paragraph::new(input.as_str())
-                .block(Block::new().title("input").borders(Borders::ALL)),
+                .block(Block::new().title("input").borders(Borders::ALL).border_style(Style::default().fg(Color::Green))),
                 layout[0],
              );
 
              frame.render_widget(
                 Paragraph::new(output.as_str())
-                .block(Block::new().title("input").borders(Borders::ALL)),
+                .block(Block::new().title("output").borders(Borders::ALL)),
                 layout[1],
            );
 
@@ -60,12 +60,15 @@ fn main() -> Result<()> {
         
 
         if let Event::Key(key) = event::read()? {
-            if key.kind == KeyEventKind::Press {
+         if key.kind == KeyEventKind::Press {
 
                  match key.code {
                 KeyCode::Char(c) => input.push(c),      
                 KeyCode::Backspace => {
                     input.pop();                        
+                }
+                KeyCode::Enter => {
+                    input.push('\n');
                 }
                 KeyCode::Tab  =>  {
                     output = send_input(&input)?;
@@ -74,7 +77,7 @@ fn main() -> Result<()> {
                 _ => {}
             }
            
-            }
+           }
         }
     
     }
@@ -91,8 +94,6 @@ fn main() -> Result<()> {
 
    fn send_input(input: &str) -> Result<String> {
     let output = if input.trim() != "" {
-                println!("sendingggg");
-
         Some(Command::new("ollama")
             .arg("run")
             .arg("gemma3:1b")
