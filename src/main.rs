@@ -1,15 +1,19 @@
 
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode};
-use crossterm::terminal::{enable_raw_mode, disable_raw_mode};
+use crossterm::terminal::{enable_raw_mode, disable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen};
 use ratatui::prelude::*;
 use ratatui::widgets::*;
 use std::io::stdout;
 use std::process::Command;
 use std::str;
+use crossterm::execute;
+use crossterm::event::KeyEventKind;
 
 
 fn main() -> Result<()> {
+   execute!(stdout(), EnterAlternateScreen)?;
+
     enable_raw_mode()?;
 
     let backend = CrosstermBackend::new(stdout());
@@ -38,11 +42,12 @@ fn main() -> Result<()> {
                 layout[0],
              );
 
-             frame.render_widget(
-                Paragraph::new(output.as_str())
-                .block(Block::new().title("input").borders(Borders::ALL)),
-                layout[1],
-             );
+            // frame.render_widget(
+             //   Paragraph::new(output.as_str())
+            //    .block(Block::new().title("input").borders(Borders::ALL)),
+            //    layout[1],
+           //  );
+
 
 
         })?;
@@ -54,9 +59,10 @@ fn main() -> Result<()> {
 
         
 
-       
         if let Event::Key(key) = event::read()? {
-            match key.code {
+            if key.kind == KeyEventKind::Press {
+
+                 match key.code {
                 KeyCode::Char(c) => input.push(c),      
                 KeyCode::Backspace => {
                     input.pop();                        
@@ -67,10 +73,14 @@ fn main() -> Result<()> {
                  KeyCode::Esc => break,                 
                 _ => {}
             }
+           
+            }
         }
+    
     }
-
     disable_raw_mode()?;
+   execute!(stdout(), LeaveAlternateScreen)?;
+
     Ok(())
 }
 
