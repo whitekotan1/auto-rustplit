@@ -42,11 +42,11 @@ fn main() -> Result<()> {
                 layout[0],
              );
 
-            // frame.render_widget(
-             //   Paragraph::new(output.as_str())
-            //    .block(Block::new().title("input").borders(Borders::ALL)),
-            //    layout[1],
-           //  );
+             frame.render_widget(
+                Paragraph::new(output.as_str())
+                .block(Block::new().title("input").borders(Borders::ALL)),
+                layout[1],
+           );
 
 
 
