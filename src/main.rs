@@ -67,7 +67,7 @@ fn main() -> Result<()> {
                 KeyCode::Backspace => {
                     input.pop();                        
                 }
-                KeyCode::CapsLock =>  {
+                KeyCode::Tab  =>  {
                     output = send_input(&input)?;
                 }
                  KeyCode::Esc => break,                 
@@ -89,15 +89,24 @@ fn main() -> Result<()> {
 
 
 
-    fn send_input(input: &str) -> Result<String> {
-    let output = Command::new("ollama")
-    .arg("run")
-    .arg("Llama-3.2-1B")
-    .arg(input)
-    .output()?;
+   fn send_input(input: &str) -> Result<String> {
+    let output = if input.trim() != "" {
+                println!("sendingggg");
 
-    let s = String::from_utf8_lossy(&output.stdout).to_string();
+        Some(Command::new("ollama")
+            .arg("run")
+            .arg("gemma3:1b")
+            .arg(input)
+            .output()?)
+    } else {
+        println!("error: empty input");
+        None
+    };
+
+    let s = match output {
+        Some(o) => String::from_utf8_lossy(&o.stdout).to_string(),
+        None => String::new(),
+    };
+
     Ok(s)
-    
-
-    }
+}
