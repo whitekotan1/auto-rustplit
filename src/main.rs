@@ -34,16 +34,23 @@ fn main() -> Result<()> {
                 Constraint::Percentage(50),
                 Constraint::Percentage(50),
             ])
-            .split(frame.size());
+            .split(frame.area());
 
              frame.render_widget(
                 Paragraph::new(input.as_str())
+                
+                .style(
+                    Style::default().fg(Color::White).bg(Color::Rgb(55, 60, 87))
+                )
                 .block(Block::new().title("input").borders(Borders::ALL).border_style(Style::default().fg(Color::Green))),
                 layout[0],
              );
 
              frame.render_widget(
                 Paragraph::new(output.as_str())
+                .style(
+                    Style::default().fg(Color::White).bg(Color::Rgb(55, 60, 87))
+                )
                 .block(Block::new().title("output").borders(Borders::ALL)),
                 layout[1],
            );
@@ -111,3 +118,7 @@ fn main() -> Result<()> {
 
     Ok(s)
 }
+/* 
+fn run_model() {
+
+}*/
