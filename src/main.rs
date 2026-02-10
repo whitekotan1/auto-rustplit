@@ -104,6 +104,8 @@ fn main() -> Result<()> {
         Some(Command::new("ollama")
             .arg("run")
             .arg("gemma3:1b")
+            .arg("SYSTEM:
+You are a silent code autocomplete engine. Output only full code(user + your addition. ")
             .arg(input)
             .output()?)
     } else {
